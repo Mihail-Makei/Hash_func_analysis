@@ -84,15 +84,10 @@ mm::List<T>::~List()
 template <class data>
 void Reallocate(data*& array, size_t old_size, size_t new_size)
 {
-    try {
-        data* temp = new data[new_size];
-        for (int i = 0; i < old_size; i++)
-            temp[i] = array[i];
-        array = temp;
-    } catch (std::bad_alloc& exception) {
-        std::cout << "Error occured: " << exception.what();
-    }
-
+    data* temp = new data[new_size];
+    for (int i = 0; i < old_size; i++)
+        temp[i] = array[i];
+    array = temp;
 }
 
 
@@ -120,32 +115,19 @@ void mm::List<T>::ResizeUp()
 ///----------------------------------------------------------------------------------------------------
 template<class T>
 T mm::List<T>::front() {
-    try {
-        if (this->size == 0)
-            throw std::underflow_error(EMPTY_STR);
+    if (this->size == 0)
+        throw std::underflow_error(EMPTY_STR);
 
-        return this->data[this->first];
-    } catch (std::underflow_error str) {
-        std::cout << "Error: " << str.what() << std::endl;
-    }
-
-    return 0;
+    return this->data[this->first];
 }
 
 ///----------------------------------------------------------------------------------------------------
 template<class T>
 T mm::List<T>::back() {
-    try {
-        if (this->size == 0)
-            throw std::underflow_error(EMPTY_STR);
+    if (this->size == 0)
+        throw std::underflow_error(EMPTY_STR);
 
-        return this->data[this->last];
-    }
-    catch (std::underflow_error& str) {
-        std::cout << "Error: " << str.what() << std::endl;
-    }
-
-    return 0;
+    return this->data[this->last];
 }
 
 ///----------------------------------------------------------------------------------------------------
@@ -186,37 +168,31 @@ void mm::List<T>::Dump() {
 
 template<class T>
 T mm::List<T>::pop_back() {
-    try {
-        if (this->size == 0)
-            throw std::underflow_error(EMPTY_STR);
+    if (this->size == 0)
+        throw std::underflow_error(EMPTY_STR);
 
-        this->size--;
-        int temp = this->prev[this->last];
+    this->size--;
+    int temp = this->prev[this->last];
 
-        std::cout << "FREE\t" << this->free << std::endl;
+    //std::cout << "FREE\t" << this->free << std::endl;
 
-        this->next[this->last] = this->free;
-        this->prev[this->last] = NULLPOINTER;
+    this->next[this->last] = this->free;
+    this->prev[this->last] = NULLPOINTER;
 
-        T ret = this->data[this->last];
-        this->data[this->last] = {};
+    T ret = this->data[this->last];
+    this->data[this->last] = {};
 
-        this->free = this->last;
+    this->free = this->last;
 
-        this->last = temp;
+    this->last = temp;
 
-        if (this->size == 0)
-            this->first = NULLPOINTER;
-        else
-            this->next[temp] = NULLPOINTER;
+    if (this->size == 0)
+        this->first = NULLPOINTER;
+    else
+        this->next[temp] = NULLPOINTER;
 
-        return ret;
-    }
-    catch (std::underflow_error str) {
-        std::cout << "Error: " << str.what() << std::endl;
-    }
-
-    return 0;
+    return ret;
+    
 }
 
 template<class T>
@@ -242,7 +218,6 @@ void mm::List<T>::push_front(T value) {
 
 template<class T>
 T mm::List<T>::pop_front() {
-    try {
         if (this->size == 0)
             throw std::underflow_error(EMPTY_STR);
 
@@ -263,11 +238,6 @@ T mm::List<T>::pop_front() {
 
         return ret;
 
-    } catch (std::underflow_error str) {
-        std::cout << "Error: " << str.what() << std::endl;
-
-        return 0;
-    }
 }
 
 template<class T>
@@ -282,7 +252,6 @@ int mm::List<T>::end() {
 
 template<class T>
 T mm::List<T>::delete_elem(const int num) {
-    try {
         if (num < 0 || num >= this->maxsize)
             throw std::out_of_range(OUT_OF_RANGE);
 
@@ -345,16 +314,11 @@ T mm::List<T>::delete_elem(const int num) {
 
         return value;
 
-    } catch (std::out_of_range& str) {
-        std::cout << "Error: " << str.what() << std::endl;
-
-        return {};
-    }
+   
 }
 
 template<class T>
 void mm::List<T>::insert_before(T value, const int num) {
-    try {
         if (num < 0 || num >= this->maxsize)
             throw std::out_of_range(OUT_OF_RANGE);
 
@@ -381,15 +345,10 @@ void mm::List<T>::insert_before(T value, const int num) {
         this->next[this->prev[temp]] = temp;
 
         this->data[temp] = value;
-
-    } catch (std::out_of_range str) {
-        std::cout << "Error: " << str.what() << std::endl;
-    }
 }
 
 template<class T>
 void mm::List<T>::insert_after(T value, const int num) {
-    try {
         if (num < 0 || num >= this->maxsize)
             throw std::out_of_range(OUT_OF_RANGE);
 
@@ -416,10 +375,6 @@ void mm::List<T>::insert_after(T value, const int num) {
         this->prev[this->next[temp]] = temp;
 
         this->data[temp] = value;
-
-    } catch (std::out_of_range str) {
-        std::cout << "Error: " << str.what() << std::endl;
-    }
 }
 
 template<class T>
